@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"regexp"
 	"strings"
+	"sync"
 )
 
 func parseHtml(body []byte) []string {
@@ -16,31 +17,38 @@ func parseHtml(body []byte) []string {
 	for _, v := range matched {
 		links = append(links, v[1])
 	}
-
 	return links
 }
 
 func validateLinks(links []string) (n int, brokenLinks []string) {
+	var wg sync.WaitGroup
 	for _, l := range links {
-		_, err := http.Get(l)
-		if err != nil {
-			n++
-			brokenLinks = append(brokenLinks, l)
-		}
+		wg.Add(1)
+		go func(l string) {
+			defer wg.Done()
+			_, err := http.Get(l)
+			if err != nil {
+				n++
+				brokenLinks = append(brokenLinks, l)
+			}
+		}(l)
 	}
+
+	go func() {
+		// wait until counter is 0
+		wg.Wait()
+	}()
 	return n, brokenLinks
 }
 
 func LinkChecker(url string) (string, error) {
 	req, err := http.Get(url)
-
 	if err != nil {
 		return "", err
 	}
 
 	defer req.Body.Close()
 	body, err := io.ReadAll(req.Body)
-
 	if err != nil {
 		return "", err
 	}

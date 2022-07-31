@@ -2,6 +2,8 @@
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/Jasstkn/link-checker)](https://goreportcard.com/report/github.com/Jasstkn/link-checker)
 
+A linkchecker is a simple CLI tool to find all broken links in your website. 
+
 ## Build
 
 - with [Taskfile][1]
