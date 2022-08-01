@@ -27,6 +27,12 @@ parsed url: https://en.wikipedia.org/
 
 ./linkcheker -url https://en.wikipedia-broken.org/
 Get "https://en.wikipedia-broken.org/": dial tcp: lookup en.wikipedia-broken.org: no such host
+
+./linkcheker -url https://github.com/Jasstkn/link-checker
+13 links scanned, 3 broken links found:
+https://github.com/Jasstkn/link-checker/tree/{{ urlEncodedRefName }};
+https://github.com/Jasstkn/link-checker/tree/{{ urlEncodedRefName }};
+https://github.com/Jasstkn/test-repo.git
 ```
 
 [1]: https://taskfile.dev/
