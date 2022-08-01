@@ -5,3 +5,11 @@ tasks:
     cmds:
       - go build -o linkcheker cmd/linkchecker/main.go
     silent: true
+
+  test:
+    cmds:
+      - go test ./...
+
+  coverage:
+    cmds:
+      - go test ./... -coverprofile=coverage.out

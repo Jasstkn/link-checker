@@ -9,9 +9,9 @@ import (
 	"sync"
 )
 
-func parseHtml(body []byte) []string {
+func ParseHtml(body string) []string {
 	re := regexp.MustCompile(`<a href="(http.*?)"`)
-	matched := re.FindAllStringSubmatch(string(body), -1)
+	matched := re.FindAllStringSubmatch(body, -1)
 
 	links := make([]string, 0, len(matched))
 	for _, v := range matched {
@@ -20,7 +20,7 @@ func parseHtml(body []byte) []string {
 	return links
 }
 
-func validateLinks(links []string) (n int, brokenLinks []string) {
+func ValidateLinks(links []string) (n int, brokenLinks []string) {
 	var wg sync.WaitGroup
 	for _, l := range links {
 		wg.Add(1)
@@ -53,13 +53,13 @@ func LinkChecker(url string) (string, error) {
 		return "", err
 	}
 
-	links := parseHtml(body)
+	links := ParseHtml(string(body))
 
 	if len(links) == 0 {
 		return "No links were found", nil
 	}
 
-	brokenNum, brokenLinks := validateLinks(links)
+	brokenNum, brokenLinks := ValidateLinks(links)
 
 	if brokenNum == 0 {
 		return fmt.Sprintf("%d links scanned, %d broken found", len(links), brokenNum), nil
