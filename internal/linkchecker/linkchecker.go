@@ -20,25 +20,36 @@ func ParseHtml(body string) []string {
 	return links
 }
 
-func ValidateLinks(links []string) (n int, brokenLinks []string) {
+func ValidateLinks(links []string) (int, []string) {
 	var wg sync.WaitGroup
+	ch := make(chan string)
+
 	for _, l := range links {
 		wg.Add(1)
 		go func(l string) {
 			defer wg.Done()
-			_, err := http.Get(l)
-			if err != nil {
-				n++
-				brokenLinks = append(brokenLinks, l)
+			r, _ := http.Get(l)
+			if r.StatusCode > 299 {
+				ch <- l
 			}
 		}(l)
 	}
 
+	// close chanel to prevent memory leak
 	go func() {
 		// wait until counter is 0
 		wg.Wait()
+		if ch != nil {
+			close(ch)
+		}
 	}()
-	return n, brokenLinks
+
+	var brokenLinks []string
+	for l := range ch {
+		brokenLinks = append(brokenLinks, l)
+	}
+
+	return len(brokenLinks), brokenLinks
 }
 
 func LinkChecker(url string) (string, error) {
@@ -65,5 +76,5 @@ func LinkChecker(url string) (string, error) {
 		return fmt.Sprintf("%d links scanned, %d broken found", len(links), brokenNum), nil
 	}
 
-	return fmt.Sprintf("%d links scanned, %d broken links found, %s", len(links), brokenNum, strings.Join(brokenLinks, ";\n")), nil
+	return fmt.Sprintf("%d links scanned, %d broken links found:\n%s", len(links), brokenNum, strings.Join(brokenLinks, ";\n")), nil
 }
