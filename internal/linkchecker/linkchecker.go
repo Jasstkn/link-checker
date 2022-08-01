@@ -39,9 +39,7 @@ func ValidateLinks(links []string) (int, []string) {
 	go func() {
 		// wait until counter is 0
 		wg.Wait()
-		if ch != nil {
-			close(ch)
-		}
+		close(ch)
 	}()
 
 	var brokenLinks []string
