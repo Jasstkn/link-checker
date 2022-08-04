@@ -20,9 +20,12 @@ jobs:
 
     - name: Build
       run: go build -v ./...
-
+      
     - name: Test
       run: go test -v ./... --tags=integration
-      
     - name: Coverage
-      run: go test ./... --tags=integration -coverprofile=coverage.out
+    
+      run: go test -race --tags=integration -coverprofile=coverage.txt -covermode=atomic
+    - name: Upload coverage to Codecov
+    
+      uses: codecov/codecov-action@v3
