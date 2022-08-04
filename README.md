@@ -1,6 +1,7 @@
 # A website link checker
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/Jasstkn/link-checker)](https://goreportcard.com/report/github.com/Jasstkn/link-checker)
+[![codecov](https://codecov.io/gh/Jasstkn/example-go/branch/main/graph/badge.svg?token=tNKcOjlxLo)](https://codecov.io/gh/codecov/example-go)
 
 A linkchecker is a simple CLI tool to find all broken links in your website. 
 
