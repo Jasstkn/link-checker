@@ -25,7 +25,7 @@ jobs:
       run: go test -v ./... --tags=integration
     - name: Coverage
     
-      run: go test -race --tags=integration -coverprofile=coverage.txt -covermode=atomic
+      run: go test -v ./... -race --tags=integration -coverprofile=coverage.txt -covermode=atomic
     - name: Upload coverage to Codecov
     
       uses: codecov/codecov-action@v3
