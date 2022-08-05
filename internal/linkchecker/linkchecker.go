@@ -70,8 +70,8 @@ func LinkChecker(url string) (string, error) {
 
 	brokenNum, brokenLinks := ValidateLinks(links)
 
-	if brokenNum == 0 {
-		return fmt.Sprintf("%d links scanned, %d broken found", len(links), brokenNum), nil
+	if brokenNum == 1 {
+		return fmt.Sprintf("%d links scanned, %d broken link found", len(links), brokenNum), nil
 	}
 
 	return fmt.Sprintf("%d links scanned, %d broken links found:\n%s", len(links), brokenNum, strings.Join(brokenLinks, ";\n")), nil
