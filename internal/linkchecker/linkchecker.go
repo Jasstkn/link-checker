@@ -10,7 +10,7 @@ import (
 )
 
 func ParseHtml(body string) []string {
-	re := regexp.MustCompile(`<a href="(http.*?)"`)
+	re := regexp.MustCompile(`<a href="(http[a-zA-Z-_.:/]*?)"`)
 	matched := re.FindAllStringSubmatch(body, -1)
 
 	links := make([]string, 0, len(matched))
