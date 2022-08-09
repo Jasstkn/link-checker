@@ -21,7 +21,6 @@ A linkchecker is a simple CLI tool to find all broken links in your website.
 
 ## Test
 
-
 - with [Taskfile][1]
 
     ```bash
