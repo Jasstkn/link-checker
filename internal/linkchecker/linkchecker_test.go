@@ -1,9 +1,13 @@
 package linkchecker_test
 
 import (
+	"net/http"
+	"net/http/httptest"
+	"strings"
+	"testing"
+
 	"github.com/Jasstkn/link-checker/internal/linkchecker"
 	"github.com/google/go-cmp/cmp"
-	"testing"
 )
 
 func TestParseHtml(t *testing.T) {
@@ -43,4 +47,55 @@ func TestParseHtml(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestValidateLinks(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch strings.TrimSpace(r.URL.Path) {
+		case "/":
+			w.WriteHeader(200)
+		default:
+			http.NotFoundHandler().ServeHTTP(w, r)
+		}
+	}))
+
+	type args struct {
+		url string
+	}
+	defer server.Close()
+
+	tests := []struct {
+		name          string
+		args          args
+		expectedNum   int
+		expectedLinks []string
+	}{
+		{
+			name: "0 broken links",
+			args: args{
+				url: server.URL,
+			},
+			expectedNum:   0,
+			expectedLinks: nil,
+		},
+		{
+			name: "1 broken link",
+			args: args{
+				url: server.URL + "/broken/url",
+			},
+			expectedNum:   1,
+			expectedLinks: []string{server.URL + "/broken/url"},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			gotNum, gotLinks := linkchecker.ValidateLinks([]string{tt.args.url})
+
+			if gotNum != tt.expectedNum || !cmp.Equal(gotLinks, tt.expectedLinks) {
+				t.Errorf("BrokenLinks(%+v) = %+v, %+v; expected %+v, %+v.", tt.args.url, gotNum, gotLinks, tt.expectedNum, tt.expectedLinks)
+			}
+		})
+	}
+
 }
