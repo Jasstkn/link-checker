@@ -97,5 +97,42 @@ func TestValidateLinks(t *testing.T) {
 			}
 		})
 	}
+}
 
+func TestLinkChecker(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch strings.TrimSpace(r.URL.Path) {
+		case "/empty":
+			w.WriteHeader(200)
+			w.Write([]byte{})
+		default:
+			http.NotFoundHandler().ServeHTTP(w, r)
+		}
+	}))
+
+	defer server.Close()
+
+	tests := []struct {
+		name     string
+		url      string
+		expected string
+		err      error
+	}{
+		{
+			name:     "No links",
+			url:      server.URL + "/empty",
+			expected: "No links were found",
+			err:      nil,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := linkchecker.LinkChecker(tt.url)
+
+			if got != tt.expected || err != tt.err {
+				t.Errorf("LinkChecker(%+v) = %+v, %+v; expected %+v, %+v.", tt.url, got, err, tt.expected, tt.err)
+			}
+		})
+	}
 }
