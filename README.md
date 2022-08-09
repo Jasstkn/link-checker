@@ -34,8 +34,6 @@ A linkchecker is a simple CLI tool to find all broken links in your website.
 
     ```bash
     go test ./...
-    # run all tests with integrational included
-    go test ./... --tags=integration
     ```
 
 ## Example of usage

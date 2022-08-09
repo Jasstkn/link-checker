@@ -10,10 +10,6 @@ tasks:
     cmds:
       - go test ./... {{.CLI_ARGS}}
 
-  test-all:
-    cmds:
-      - go test ./... --tags=integration {{.CLI_ARGS}}
-
   coverage:
     cmds:
-      - go test ./... --tags=integration -coverprofile=coverage.out
+      - go test ./... -coverprofile=coverage.out
