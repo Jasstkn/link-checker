@@ -10,7 +10,7 @@ import (
 )
 
 func ParseHtml(body string) []string {
-	re := regexp.MustCompile(`<a href="(http[a-zA-Z-_.:/]*?)"`)
+	re := regexp.MustCompile(`<a href="(http[a-zA-Z\d\-_.:\/]*?)"`)
 	matched := re.FindAllStringSubmatch(body, -1)
 
 	links := make([]string, 0, len(matched))
@@ -61,7 +61,6 @@ func LinkChecker(url string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-
 	links := ParseHtml(string(body))
 
 	if len(links) == 0 {
@@ -70,9 +69,12 @@ func LinkChecker(url string) (string, error) {
 
 	brokenNum, brokenLinks := ValidateLinks(links)
 
-	if brokenNum == 1 {
-		return fmt.Sprintf("%d links scanned, %d broken link found", len(links), brokenNum), nil
+	switch brokenNum {
+	case 0:
+		return fmt.Sprintf("%d links scanned, %d broken links found%s", len(links), brokenNum, strings.Join(brokenLinks, ";\n")), nil
+	case 1:
+		return fmt.Sprintf("%d links scanned, %d broken link found:\n%s", len(links), brokenNum, strings.Join(brokenLinks, ";\n")), nil
+	default:
+		return fmt.Sprintf("%d links scanned, %d broken links found:\n%s", len(links), brokenNum, strings.Join(brokenLinks, ";\n")), nil
 	}
-
-	return fmt.Sprintf("%d links scanned, %d broken links found:\n%s", len(links), brokenNum, strings.Join(brokenLinks, ";\n")), nil
 }
