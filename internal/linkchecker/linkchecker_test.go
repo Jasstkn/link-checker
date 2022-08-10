@@ -122,25 +122,31 @@ func TestLinkChecker(t *testing.T) {
 		name     string
 		url      string
 		expected string
-		err      error
+		err      bool
 	}{
 		{
 			name:     "No links",
 			url:      server.URL + "/empty",
 			expected: "No links were found",
-			err:      nil,
+			err:      false,
 		},
 		{
 			name:     "0 broken",
 			url:      server.URL + "/",
 			expected: "1 links scanned, 0 broken links found",
-			err:      nil,
+			err:      false,
 		},
 		{
 			name:     "1 broken",
 			url:      server.URL + "/broken",
 			expected: "1 links scanned, 1 broken link found:\n" + server.URL + "/broken-url",
-			err:      nil,
+			err:      false,
+		},
+		{
+			name:     "wrong protocol: hhttp",
+			url:      "h" + server.URL,
+			expected: "",
+			err:     true,
 		},
 	}
 
@@ -148,8 +154,12 @@ func TestLinkChecker(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := linkchecker.LinkChecker(tt.url)
 
-			if got != tt.expected || err != tt.err {
-				t.Errorf("LinkChecker(%+v) = %+v, %+v; expected %+v, %+v.", tt.url, got, err, tt.expected, tt.err)
+			if tt.err && err == nil {
+				t.Errorf("LinkChecker(%+v) expected error but received %v", tt.url, err)
+			}
+
+			if got != tt.expected {
+				t.Errorf("LinkChecker(%+v) = %+v; expected %+v.", tt.url, got, tt.expected)
 			}
 		})
 	}
