@@ -7,11 +7,24 @@ import (
 	"github.com/Jasstkn/link-checker/pkg/linkchecker"
 )
 
+var (
+	Version   string
+	GitCommit string
+)
+
 func main() {
-	url := flag.String("url", "", "url to check")
+	urlFlag := flag.String("url", "", "URL to check")
+	versionFlag := flag.Bool("version", false, "Print the current version")
 	flag.Parse()
 
-	check, err := linkchecker.LinkChecker(*url)
+	switch {
+	case *versionFlag:
+		fmt.Printf("Version: %s\n", Version)
+		fmt.Printf("Git commit: %s\n", GitCommit)
+		return
+	}
+
+	check, err := linkchecker.LinkChecker(*urlFlag)
 
 	if err != nil {
 		fmt.Printf("%v", err)
