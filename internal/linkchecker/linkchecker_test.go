@@ -1,6 +1,7 @@
 package linkchecker_test
 
 import (
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -97,5 +98,59 @@ func TestValidateLinks(t *testing.T) {
 			}
 		})
 	}
+}
 
+func TestLinkChecker(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch strings.TrimSpace(r.URL.Path) {
+		case "/":
+			w.WriteHeader(200)
+			fmt.Fprintln(w, "<a href=\"http://"+r.Host+"\">")
+		case "/empty":
+			w.WriteHeader(200)
+		case "/broken":
+			w.WriteHeader(200)
+			fmt.Fprintln(w, "<a href=\"http://"+r.Host+"/broken-url\">")
+		default:
+			http.NotFoundHandler().ServeHTTP(w, r)
+		}
+	}))
+
+	defer server.Close()
+
+	tests := []struct {
+		name     string
+		url      string
+		expected string
+		err      error
+	}{
+		{
+			name:     "No links",
+			url:      server.URL + "/empty",
+			expected: "No links were found",
+			err:      nil,
+		},
+		{
+			name:     "0 broken",
+			url:      server.URL + "/",
+			expected: "1 links scanned, 0 broken links found",
+			err:      nil,
+		},
+		{
+			name:     "1 broken",
+			url:      server.URL + "/broken",
+			expected: "1 links scanned, 1 broken link found:\n" + server.URL + "/broken-url",
+			err:      nil,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := linkchecker.LinkChecker(tt.url)
+
+			if got != tt.expected || err != tt.err {
+				t.Errorf("LinkChecker(%+v) = %+v, %+v; expected %+v, %+v.", tt.url, got, err, tt.expected, tt.err)
+			}
+		})
+	}
 }
