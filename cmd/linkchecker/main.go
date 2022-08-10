@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/Jasstkn/link-checker/internal/linkchecker"
+	"github.com/Jasstkn/link-checker/pkg/linkchecker"
 )
 
 func main() {
