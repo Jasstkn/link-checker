@@ -20,11 +20,14 @@ jobs:
       with:
         go-version: 1.18
 
+    - name: Install Task
+      uses: arduino/setup-task@v1
+
     - name: Build
-      run: go build -v ./...
+      run: task build
 
     - name: Test
-      run: go test -v ./... -race -coverprofile=coverage.out -covermode=atomic
+      run: task coverage
 
     - name: golangci-lint
       uses: golangci/golangci-lint-action@v3

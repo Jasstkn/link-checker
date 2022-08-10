@@ -16,4 +16,4 @@ tasks:
 
   coverage:
     cmds:
-      - go test ./... -coverprofile=coverage.out
+      - go test -v ./... -race -coverprofile=coverage.out -covermode=atomic
