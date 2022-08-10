@@ -69,12 +69,23 @@ func LinkChecker(url string) (string, error) {
 
 	brokenNum, brokenLinks := ValidateLinks(links)
 
-	switch brokenNum {
-	case 0:
-		return fmt.Sprintf("%d links scanned, %d broken links found%s", len(links), brokenNum, strings.Join(brokenLinks, ";\n")), nil
-	case 1:
+	switch {
+	case len(links) == 1 && brokenNum == 0:
+		return fmt.Sprintf("%d link scanned, %d broken links found%s", len(links), brokenNum, strings.Join(brokenLinks, ";\n")), nil
+	case len(links) == 1 && brokenNum == 1:
+		return fmt.Sprintf("%d link scanned, %d broken link found:\n%s", len(links), brokenNum, strings.Join(brokenLinks, ";\n")), nil
+	case brokenNum == 1:
 		return fmt.Sprintf("%d links scanned, %d broken link found:\n%s", len(links), brokenNum, strings.Join(brokenLinks, ";\n")), nil
 	default:
 		return fmt.Sprintf("%d links scanned, %d broken links found:\n%s", len(links), brokenNum, strings.Join(brokenLinks, ";\n")), nil
 	}
+
+	// switch brokenNum {
+	// case 0:
+	// 	return fmt.Sprintf("%d links scanned, %d broken links found%s", len(links), brokenNum, strings.Join(brokenLinks, ";\n")), nil
+	// case 1:
+	// 	return fmt.Sprintf("%d links scanned, %d broken link found:\n%s", len(links), brokenNum, strings.Join(brokenLinks, ";\n")), nil
+	// default:
+	// 	return fmt.Sprintf("%d links scanned, %d broken links found:\n%s", len(links), brokenNum, strings.Join(brokenLinks, ";\n")), nil
+	// }
 }

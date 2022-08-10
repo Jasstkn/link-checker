@@ -136,13 +136,13 @@ func TestLinkChecker(t *testing.T) {
 		{
 			name:     "0 broken",
 			url:      server.URL + "/",
-			expected: "1 links scanned, 0 broken links found",
+			expected: "1 link scanned, 0 broken links found",
 			err:      false,
 		},
 		{
 			name:     "1 broken",
 			url:      server.URL + "/broken",
-			expected: "1 links scanned, 1 broken link found:\n" + server.URL + "/broken-url",
+			expected: "1 link scanned, 1 broken link found:\n" + server.URL + "/broken-url",
 			err:      false,
 		},
 		{
