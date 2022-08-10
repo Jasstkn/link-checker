@@ -3,12 +3,14 @@ version: '3'
 tasks:
   build:
     cmds:
-      - go build -ldflags="-X main.Version={{.VERSION}} -X main.GitCommit={{.GIT_COMMIT}}" -o bin/linkchecker cmd/linkchecker/main.go
+      - go build -ldflags="$LDFLAGS" -o bin/linkchecker cmd/linkchecker/main.go
     vars:
       VERSION:
         sh: git describe --tags
       GIT_COMMIT:
         sh: git rev-list -1 HEAD
+    env:
+      LDFLAGS: "-X main.Version={{.VERSION}} -X main.GitCommit={{.GIT_COMMIT}}"
 
   test:
     cmds:
