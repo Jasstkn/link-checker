@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/Jasstkn/link-checker/pkg/linkchecker"
+	"github.com/google/go-cmp/cmp"
 )
 
 func TestLinkChecker(t *testing.T) {
@@ -86,7 +87,7 @@ func TestLinkChecker(t *testing.T) {
 				t.Errorf("LinkChecker(%+v) expected error but received %v", tt.url, err)
 			}
 
-			if got != tt.expected {
+			if !cmp.Equal(got, tt.expected) {
 				t.Errorf("LinkChecker(%+v) = %+v; expected %+v", tt.url, got, tt.expected)
 			}
 		})
