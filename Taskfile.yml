@@ -3,7 +3,7 @@ version: '3'
 tasks:
   build:
     cmds:
-      - go build -o linkcheker cmd/linkchecker/main.go
+      - go build -o linkchecker cmd/linkchecker/main.go
     silent: true
 
   test:

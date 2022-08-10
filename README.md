@@ -16,7 +16,7 @@ A linkchecker is a simple CLI tool to find all broken links in your website.
 - with Go CLI
 
     ```bash
-    go build -o linkcheker cmd/linkchecker/main.go
+    go build -o linkchecker cmd/linkchecker/main.go
     ```
 
 ## Test
@@ -38,14 +38,14 @@ A linkchecker is a simple CLI tool to find all broken links in your website.
 ## Example of usage
 
 ```bash
-./linkcheker -url https://en.wikipedia.org/
+./linkchecker -url https://en.wikipedia.org/
 parsed url: https://en.wikipedia.org/
 97 links scanned, 0 broken links found
 
-./linkcheker -url https://en.wikipedia-broken.org/
+./linkchecker -url https://en.wikipedia-broken.org/
 Get "https://en.wikipedia-broken.org/": dial tcp: lookup en.wikipedia-broken.org: no such host
 
-./linkcheker -url https://github.com/Jasstkn/link-checker
+./linkchecker -url https://github.com/Jasstkn/link-checker
 13 links scanned, 1 broken link found:
 https://github.com/Jasstkn/test-repo.git
 ```
