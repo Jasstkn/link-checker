@@ -79,13 +79,4 @@ func LinkChecker(url string) (string, error) {
 	default:
 		return fmt.Sprintf("%d links scanned, %d broken links found:\n%s", len(links), brokenNum, strings.Join(brokenLinks, ";\n")), nil
 	}
-
-	// switch brokenNum {
-	// case 0:
-	// 	return fmt.Sprintf("%d links scanned, %d broken links found%s", len(links), brokenNum, strings.Join(brokenLinks, ";\n")), nil
-	// case 1:
-	// 	return fmt.Sprintf("%d links scanned, %d broken link found:\n%s", len(links), brokenNum, strings.Join(brokenLinks, ";\n")), nil
-	// default:
-	// 	return fmt.Sprintf("%d links scanned, %d broken links found:\n%s", len(links), brokenNum, strings.Join(brokenLinks, ";\n")), nil
-	// }
 }
