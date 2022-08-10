@@ -111,6 +111,9 @@ func TestLinkChecker(t *testing.T) {
 		case "/broken":
 			w.WriteHeader(200)
 			fmt.Fprintln(w, "<a href=\"http://"+r.Host+"/broken-url\">")
+		case "/broken2":
+			w.WriteHeader(200)
+			fmt.Fprintln(w, "<a href=\"http://"+r.Host+"/broken-url1\">\n<a href=\"http://"+r.Host+"/broken-url2\">")
 		default:
 			http.NotFoundHandler().ServeHTTP(w, r)
 		}
@@ -143,10 +146,16 @@ func TestLinkChecker(t *testing.T) {
 			err:      false,
 		},
 		{
+			name:     "2 broken",
+			url:      server.URL + "/broken2",
+			expected: "2 links scanned, 2 broken links found:\n" + server.URL + "/broken-url1;\n" + server.URL + "/broken-url2",
+			err:      false,
+		},
+		{
 			name:     "wrong protocol: hhttp",
 			url:      "h" + server.URL,
 			expected: "",
-			err:     true,
+			err:      true,
 		},
 	}
 
@@ -159,7 +168,7 @@ func TestLinkChecker(t *testing.T) {
 			}
 
 			if got != tt.expected {
-				t.Errorf("LinkChecker(%+v) = %+v; expected %+v.", tt.url, got, tt.expected)
+				t.Errorf("LinkChecker(%+v) = %+v; expected %+v", tt.url, got, tt.expected)
 			}
 		})
 	}
