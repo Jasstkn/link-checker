@@ -29,7 +29,7 @@ func LinkChecker(url string) (string, error) {
 	brokenNum, brokenLinks := utils.ValidateLinks(links)
 
 	switch {
-	case len(links) == 1 && brokenNum == 0:
+	case len(links) >= 1 && brokenNum == 0:
 		return fmt.Sprintf("%d link scanned, %d broken links found%s", len(links), brokenNum, strings.Join(brokenLinks, ";\n")), nil
 	case len(links) == 1 && brokenNum == 1:
 		return fmt.Sprintf("%d link scanned, %d broken link found:\n%s", len(links), brokenNum, strings.Join(brokenLinks, ";\n")), nil
