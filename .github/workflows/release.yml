@@ -27,4 +27,4 @@ jobs:
         goarch: ${{ matrix.goarch }}
         project_path: "./cmd/linkchecker/"
         binary_name: "linkchecker"
-        ldflags: -X "main.Version=${{ github.ref }}" -X "main.GitCommit=${{ github.sha }}"
+        ldflags: -X "main.Version=${GITHUB_REF#refs/tags/}" -X "main.GitCommit=${GITHUB_SHA}"
