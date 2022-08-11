@@ -25,8 +25,11 @@ func ValidateLinks(links []string) (int, []string) {
 		wg.Add(1)
 		go func(l string) {
 			defer wg.Done()
-			r, _ := http.Get(l)
-			if r.StatusCode > 299 {
+			client := &http.Client{}
+			req, _ := http.NewRequest("GET", l, nil)
+			resp, _ := client.Do(req)
+			// linkedin return 999
+			if resp.StatusCode > 400 && resp.StatusCode != 999 {
 				ch <- l
 			}
 		}(l)
