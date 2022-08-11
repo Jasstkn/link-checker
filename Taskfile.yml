@@ -2,14 +2,36 @@ version: '3'
 
 tasks:
   build:
+    desc: Build app with version
     cmds:
-      - go build -o bin/linkchecker cmd/linkchecker/main.go
-    silent: true
+      - task: deps
+      - go build -ldflags="$LDFLAGS" -o bin/linkchecker cmd/linkchecker/main.go
+    vars:
+      VERSION:
+        sh: git describe --tags
+      GIT_COMMIT:
+        sh: git rev-list -1 HEAD
+    env:
+      LDFLAGS: "-X main.Version={{.VERSION}} -X main.GitCommit={{.GIT_COMMIT}}"
 
   test:
+    desc: Run tests
     cmds:
+      - task: deps
       - go test ./... {{.CLI_ARGS}}
 
   coverage:
+    desc: Run tests and generate coverage report
     cmds:
-      - go test ./... -coverprofile=coverage.out
+      - go test -v ./... -race -coverprofile=coverage.out -covermode=atomic
+
+  clean:
+    desc: Run tests without cache
+    cmds:
+      - go clean -testcache
+      - task: test
+
+  deps:
+    desc: Install dependencies
+    cmds:
+      - go mod tidy

@@ -8,6 +8,7 @@ import (
 
 	"github.com/Jasstkn/link-checker/internal/utils"
 	"github.com/google/go-cmp/cmp"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestParseHtml(t *testing.T) {
@@ -59,41 +60,40 @@ func TestValidateLinks(t *testing.T) {
 		}
 	}))
 
-	type args struct {
-		url string
-	}
 	defer server.Close()
 
 	tests := []struct {
 		name          string
-		args          args
+		urls          []string
 		expectedNum   int
 		expectedLinks []string
 	}{
 		{
-			name: "0 broken links",
-			args: args{
-				url: server.URL,
-			},
+			name:          "0 broken links",
+			urls:          []string{server.URL},
 			expectedNum:   0,
 			expectedLinks: nil,
 		},
 		{
-			name: "1 broken link",
-			args: args{
-				url: server.URL + "/broken/url",
-			},
+			name:          "1 broken link",
+			urls:          []string{server.URL + "/broken/url"},
 			expectedNum:   1,
 			expectedLinks: []string{server.URL + "/broken/url"},
+		},
+		{
+			name:          "2 broken links",
+			urls:          []string{server.URL + "/broken/url1", server.URL + "/broken/url2"},
+			expectedNum:   2,
+			expectedLinks: []string{server.URL + "/broken/url1", server.URL + "/broken/url2"},
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			gotNum, gotLinks := utils.ValidateLinks([]string{tt.args.url})
+			gotNum, gotLinks := utils.ValidateLinks(tt.urls)
 
-			if gotNum != tt.expectedNum || !cmp.Equal(gotLinks, tt.expectedLinks) {
-				t.Errorf("BrokenLinks(%+v) = %+v, %+v; expected %+v, %+v.", tt.args.url, gotNum, gotLinks, tt.expectedNum, tt.expectedLinks)
+			if gotNum != tt.expectedNum || !assert.ElementsMatch(t, gotLinks, tt.expectedLinks) {
+				t.Errorf("BrokenLinks(%+v) = %+v, %+v; expected %+v, %+v.", tt.urls, gotNum, gotLinks, tt.expectedNum, tt.expectedLinks)
 			}
 		})
 	}

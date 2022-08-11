@@ -14,17 +14,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-
+      with:
+        fetch-depth: 0
     - name: Set up Go
       uses: actions/setup-go@v3
       with:
         go-version: 1.19
 
+    - name: Install Task
+      uses: arduino/setup-task@v1
+
     - name: Build
-      run: go build -v ./...
+      run: task build
 
     - name: Test
-      run: go test -v ./... -race -coverprofile=coverage.out -covermode=atomic
+      run: task coverage
 
     - name: golangci-lint
       uses: golangci/golangci-lint-action@v3

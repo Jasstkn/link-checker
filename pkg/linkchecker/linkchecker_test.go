@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/Jasstkn/link-checker/pkg/linkchecker"
+	"golang.org/x/exp/slices"
 )
 
 func TestLinkChecker(t *testing.T) {
@@ -37,43 +38,43 @@ func TestLinkChecker(t *testing.T) {
 	tests := []struct {
 		name     string
 		url      string
-		expected string
+		expected []string
 		err      bool
 	}{
 		{
 			name:     "0 total",
 			url:      server.URL + "/empty",
-			expected: "No links were found",
+			expected: []string{"No links were found"},
 			err:      false,
 		},
 		{
 			name:     "1 total: 0 broken",
 			url:      server.URL + "/",
-			expected: "1 link scanned, 0 broken links found",
+			expected: []string{"1 link scanned, 0 broken links found"},
 			err:      false,
 		},
 		{
 			name:     "1 total: 1 broken",
 			url:      server.URL + "/broken",
-			expected: "1 link scanned, 1 broken link found:\n" + server.URL + "/broken-url",
+			expected: []string{"1 link scanned, 1 broken link found:\n" + server.URL + "/broken-url"},
 			err:      false,
 		},
 		{
 			name:     "2 total: 2 broken",
 			url:      server.URL + "/broken2",
-			expected: "2 links scanned, 2 broken links found:\n" + server.URL + "/broken-url1;\n" + server.URL + "/broken-url2",
+			expected: []string{"2 links scanned, 2 broken links found:\n" + server.URL + "/broken-url1;\n" + server.URL + "/broken-url2", "2 links scanned, 2 broken links found:\n" + server.URL + "/broken-url2;\n" + server.URL + "/broken-url1"},
 			err:      false,
 		},
 		{
 			name:     "2 total: 1 broken",
 			url:      server.URL + "/partial",
-			expected: "2 links scanned, 1 broken link found:\n" + server.URL + "/broken-url1",
+			expected: []string{"2 links scanned, 1 broken link found:\n" + server.URL + "/broken-url1"},
 			err:      false,
 		},
 		{
 			name:     "wrong protocol: hhttp",
 			url:      "h" + server.URL,
-			expected: "",
+			expected: []string{""},
 			err:      true,
 		},
 	}
@@ -86,7 +87,7 @@ func TestLinkChecker(t *testing.T) {
 				t.Errorf("LinkChecker(%+v) expected error but received %v", tt.url, err)
 			}
 
-			if got != tt.expected {
+			if !slices.Contains(tt.expected, got) {
 				t.Errorf("LinkChecker(%+v) = %+v; expected %+v", tt.url, got, tt.expected)
 			}
 		})
