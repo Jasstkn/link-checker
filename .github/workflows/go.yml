@@ -2,9 +2,9 @@ name: Go
 
 on:
   push:
-    branches: [ "master" ]
+    branches: ["master"]
   pull_request:
-    branches: [ "master" ]
+    branches: ["master"]
 
 permissions:
   contents: read
@@ -13,25 +13,25 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-    - name: Set up Go
-      uses: actions/setup-go@v3
-      with:
-        go-version: 1.19
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.19
 
-    - name: Install Task
-      uses: arduino/setup-task@v1
+      - name: Install Task
+        uses: arduino/setup-task@v1
 
-    - name: Build
-      run: task build
+      - name: Build
+        run: task build
 
-    - name: Test
-      run: task coverage
+      - name: Test
+        run: task coverage
 
-    - name: golangci-lint
-      uses: golangci/golangci-lint-action@v3
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v3
 
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
