@@ -20,7 +20,7 @@ jobs:
         fetch-depth: 0
     - name: Get Release Info
       run: |
-        echo "VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
+        echo "VERSION=${GITHUB_REF/refs\/tags\//}" >> "$GITHUB_ENV"
     - uses: wangyoucao577/go-release-action@v1.30
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}

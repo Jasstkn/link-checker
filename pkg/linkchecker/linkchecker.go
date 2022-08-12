@@ -1,3 +1,4 @@
+// Package linkchecker contains main logic for application
 package linkchecker
 
 import (
@@ -9,6 +10,7 @@ import (
 	"github.com/Jasstkn/link-checker/internal/utils"
 )
 
+// LinkChecker accepts an url to parse links from and return a message about amount of broken links with URLs
 func LinkChecker(url string) (string, error) {
 	req, err := http.Get(url)
 	if err != nil {
@@ -20,7 +22,7 @@ func LinkChecker(url string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	links := utils.ParseHtml(string(body))
+	links := utils.ParseHTML(string(body))
 
 	if len(links) == 0 {
 		return "No links were found", nil

@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestParseHtml(t *testing.T) {
+func TestParseHTML(t *testing.T) {
 	tests := []struct {
 		name     string
 		body     string
@@ -41,10 +41,10 @@ func TestParseHtml(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := utils.ParseHtml(tt.body)
+			got := utils.ParseHTML(tt.body)
 
 			if !cmp.Equal(got, tt.expected) {
-				t.Errorf("ParseHtml(%+v) = %+v; expected %+v", tt.body, got, tt.expected)
+				t.Errorf("ParseHTML(%+v) = %+v; expected %+v", tt.body, got, tt.expected)
 			}
 		})
 	}
