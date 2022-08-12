@@ -15,17 +15,17 @@ jobs:
           - goarch: "386"
             goos: darwin
     steps:
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-    - name: Get Release Info
-      run: |
-        echo "VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
-    - uses: wangyoucao577/go-release-action@v1.30
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        goos: ${{ matrix.goos }}
-        goarch: ${{ matrix.goarch }}
-        project_path: "./cmd/linkchecker/"
-        binary_name: "linkchecker"
-        ldflags: -X "main.Version=${{ env.VERSION }}" -X "main.GitCommit=${{ github.sha }}"
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Get Release Info
+        run: |
+          echo "VERSION=${GITHUB_REF/refs\/tags\//}" >> "$GITHUB_ENV"
+      - uses: wangyoucao577/go-release-action@v1.30
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          goos: ${{ matrix.goos }}
+          goarch: ${{ matrix.goarch }}
+          project_path: "./cmd/linkchecker/"
+          binary_name: "linkchecker"
+          ldflags: -X "main.Version=${{ env.VERSION }}" -X "main.GitCommit=${{ github.sha }}"

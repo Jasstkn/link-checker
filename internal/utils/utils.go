@@ -1,3 +1,4 @@
+// Package utils provides independent untils functions for the linkchecker package
 package utils
 
 import (
@@ -6,7 +7,8 @@ import (
 	"sync"
 )
 
-func ParseHtml(body string) []string {
+// ParseHTML parses HTML and return []string of links
+func ParseHTML(body string) []string {
 	re := regexp.MustCompile(`<a href="(http[a-zA-Z\d\-_.:\/]*?)"`)
 	matched := re.FindAllStringSubmatch(body, -1)
 
@@ -17,6 +19,7 @@ func ParseHtml(body string) []string {
 	return links
 }
 
+// ValidateLinks validates []string and return number of broken with list of them
 func ValidateLinks(links []string) (int, []string) {
 	var wg sync.WaitGroup
 	ch := make(chan string)

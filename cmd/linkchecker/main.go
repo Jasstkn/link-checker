@@ -1,3 +1,4 @@
+// Package to build a command-line tool for checking broken links
 package main
 
 import (
@@ -8,8 +9,8 @@ import (
 )
 
 var (
-	Version   string
-	GitCommit string
+	Version   string // Version stores release tag
+	GitCommit string // GitCommit stores SHA's release commit
 )
 
 func main() {
