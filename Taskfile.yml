@@ -1,18 +1,21 @@
 version: "3"
 
+vars:
+  APP: linkchecker
+  VERSION:
+    sh: git describe --tags --abbrev=0
+  GIT_COMMIT:
+    sh: git rev-parse --short HEAD
+
+env:
+  LDFLAGS: "-X main.Version={{.VERSION}} -X main.GitCommit={{.GIT_COMMIT}}"
+
 tasks:
   build:
     desc: Build app with version
     cmds:
       - task: deps
-      - go build -ldflags="$LDFLAGS" -o bin/linkchecker cmd/linkchecker/main.go
-    vars:
-      VERSION:
-        sh: git describe --tags
-      GIT_COMMIT:
-        sh: git rev-list -1 HEAD
-    env:
-      LDFLAGS: "-X main.Version={{.VERSION}} -X main.GitCommit={{.GIT_COMMIT}}"
+      - go build -ldflags="$LDFLAGS" -o bin/{{.APP}} cmd/{{.APP}}/main.go
 
   test:
     desc: Run tests
@@ -35,3 +38,16 @@ tasks:
     desc: Install dependencies
     cmds:
       - go mod tidy
+
+  docker-build:
+    desc: Build container image
+    cmds:
+      - |
+        docker build -t {{.APP}}:{{.VERSION}}-{{.GIT_COMMIT}} \
+          --build-arg LDFLAGS="$LDFLAGS" \
+          -f Dockerfile .
+
+  docker-run:
+    desc: Run container image
+    cmds:
+      - docker run {{.APP}}:{{.VERSION}}-{{.GIT_COMMIT}} {{.CLI_ARGS}}
