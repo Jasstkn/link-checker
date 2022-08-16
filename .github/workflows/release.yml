@@ -2,6 +2,12 @@ on:
   release:
     types: [created]
 
+env:
+  # Use docker.io for Docker Hub if empty
+  REGISTRY: docker.io
+  # github.repository as <account>/<repo>
+  IMAGE_NAME: ${{ github.repository }}
+
 jobs:
   release:
     name: release linux/amd64
