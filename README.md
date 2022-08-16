@@ -50,6 +50,14 @@ Get "https://en.wikipedia-broken.org/": dial tcp: lookup en.wikipedia-broken.org
 https://github.com/Jasstkn/test-repo.git
 ```
 
+With docker image:
+
+```bash
+docker run linkchecker:0.1.1 -url=https://github.com/Jasstkn/link-checker
+16 links scanned, 1 broken link found:
+https://github.com/Jasstkn/test-repo.git
+```
+
 [1]: https://taskfile.dev/
 
 > broken link to test

@@ -23,4 +23,4 @@ WORKDIR /
 
 COPY --from=build /app/linkchecker linkchecker
 
-CMD ["/linkchecker"]
+ENTRYPOINT ["/linkchecker"]
