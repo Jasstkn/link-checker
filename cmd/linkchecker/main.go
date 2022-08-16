@@ -4,6 +4,8 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
+	"strings"
 
 	"github.com/Jasstkn/link-checker/pkg/linkchecker"
 )
@@ -11,6 +13,8 @@ import (
 var (
 	Version   string // Version stores release tag
 	GitCommit string // GitCommit stores SHA's release commit
+
+	supportedSchemes = [...]string{"http://", "https://"}
 )
 
 func main() {
@@ -25,6 +29,10 @@ func main() {
 		return
 	}
 
+	if err := ValidateURL(*urlFlag); err != nil {
+		log.Fatal(err)
+	}
+
 	check, err := linkchecker.LinkChecker(*urlFlag)
 
 	if err != nil {
@@ -32,4 +40,15 @@ func main() {
 	}
 
 	fmt.Println(check)
+}
+
+// ValidateURL returns whether a given URL scheme is supported
+func ValidateURL(url string) error {
+	for _, scheme := range supportedSchemes {
+		if strings.Contains(url, scheme) {
+			return nil
+		}
+	}
+	return fmt.Errorf("missing or not supported URL scheme in %q. Available: %s",
+		url, strings.Join(supportedSchemes[:], ", "))
 }
