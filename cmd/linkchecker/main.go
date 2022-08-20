@@ -5,21 +5,22 @@ import (
 	"flag"
 	"fmt"
 	"log"
-	"strings"
+	"os"
 
-	"github.com/Jasstkn/link-checker/pkg/linkchecker"
+	"github.com/Jasstkn/link-checker/internal/linkchecker"
+	"github.com/Jasstkn/link-checker/internal/server"
+	"github.com/Jasstkn/link-checker/internal/utils"
 )
 
 var (
 	Version   string // Version stores release tag
 	GitCommit string // GitCommit stores SHA's release commit
-
-	supportedSchemes = [...]string{"http://", "https://"}
 )
 
 func main() {
 	urlFlag := flag.String("url", "", "URL to check")
 	versionFlag := flag.Bool("version", false, "Print the current version")
+	serverFlag := flag.Bool("server", false, "Enable server mode")
 	flag.Parse()
 
 	switch {
@@ -27,9 +28,18 @@ func main() {
 		fmt.Printf("Version: %s\n", Version)
 		fmt.Printf("Git commit: %s\n", GitCommit)
 		return
+	case *serverFlag && *urlFlag != "":
+		log.Fatal("can't use CLI and server mode simultaneously")
+	case *serverFlag:
+		server.Init()
+	case *urlFlag != "":
+		break
+	default:
+		fmt.Println("run linkchecker -help to see available options")
+		os.Exit(0)
 	}
 
-	if err := ValidateURL(*urlFlag); err != nil {
+	if err := utils.ValidateURL(*urlFlag); err != nil {
 		log.Fatal(err)
 	}
 
@@ -40,15 +50,4 @@ func main() {
 	}
 
 	fmt.Println(check)
-}
-
-// ValidateURL returns whether a given URL scheme is supported
-func ValidateURL(url string) error {
-	for _, scheme := range supportedSchemes {
-		if strings.Contains(url, scheme) {
-			return nil
-		}
-	}
-	return fmt.Errorf("missing or not supported URL scheme in %q. Available: %s",
-		url, strings.Join(supportedSchemes[:], ", "))
 }

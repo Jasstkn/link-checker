@@ -50,7 +50,18 @@ Get "https://en.wikipedia-broken.org/": dial tcp: lookup en.wikipedia-broken.org
 https://github.com/Jasstkn/test-repo.git
 ```
 
-With docker image:
+### Server mode
+
+```bash
+./linkchecker -server
+INFO[0000] starting server
+```
+
+Open localhost:3000 and you will see a simple UI:
+
+![UI](/docs/ui.png "UI")
+
+### With docker image
 
 ```bash
 docker run linkchecker:0.1.1 -url=https://github.com/Jasstkn/link-checker

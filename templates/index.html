@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="keywords" content="linkchecker, golang"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Link checker is a tool to find broken links on any page"/>
+  <title>linkchecker</title>
+  <link rel="stylesheet" href="assets/style.css"/>
+</head>
+<body>
+  <div class="container">
+    {{ if eq .Description nil }}
+    <h1>Link checker is ready to check... </h1>
+    <form action="/check" method="post">
+      <input
+        autofocus
+        value=""
+        placeholder="Enter a link to check"
+        type="text"
+        name="url"
+      />
+      <div>
+        <input type="submit" value="check" />
+      </div>
+    </form>
+    {{ else }}
+    <h1>Result </h1>
+    <div class="result">
+      <p>{{-
+          .Description | printf
+        -}}</p>
+    </div>
+    {{ end }}
+  </div>
+</body>
+</html>
