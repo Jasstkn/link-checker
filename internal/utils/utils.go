@@ -2,9 +2,15 @@
 package utils
 
 import (
+	"fmt"
 	"net/http"
 	"regexp"
+	"strings"
 	"sync"
+)
+
+var (
+	supportedSchemes = [...]string{"http://", "https://"}
 )
 
 // ParseHTML parses HTML and return []string of links
@@ -51,4 +57,15 @@ func ValidateLinks(links []string) (int, []string) {
 	}
 
 	return len(brokenLinks), brokenLinks
+}
+
+// ValidateURL returns whether a given URL scheme is supported
+func ValidateURL(url string) error {
+	for _, scheme := range supportedSchemes {
+		if strings.Contains(url, scheme) {
+			return nil
+		}
+	}
+	return fmt.Errorf("missing or not supported URL scheme in %q. Available: %s",
+		url, strings.Join(supportedSchemes[:], ", "))
 }

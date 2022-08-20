@@ -30,8 +30,5 @@ jobs:
       - name: Test
         run: task coverage
 
-      - name: golangci-lint
-        uses: golangci/golangci-lint-action@v3
-
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3

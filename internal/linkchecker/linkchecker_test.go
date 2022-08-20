@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Jasstkn/link-checker/pkg/linkchecker"
+	"github.com/Jasstkn/link-checker/internal/linkchecker"
 	"golang.org/x/exp/slices"
 )
 
