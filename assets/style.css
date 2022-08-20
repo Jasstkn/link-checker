@@ -2,15 +2,18 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   background-color: #ccc;
 }
+
 * {
   box-sizing: border-box;
 }
 
-h1, p, form {
+h1,
+p,
+form {
   text-align: center;
 }
 
-input[type=text] {
+input[type="text"] {
   width: 40%;
   padding: 12px;
   border: 1px solid #ccc;
@@ -22,8 +25,8 @@ input[type=text] {
   align-items: center;
 }
 
-input[type=submit] {
-  background-color: #04AA6D;
+input[type="submit"] {
+  background-color: #04aa6d;
   color: white;
   padding: 12px 20px;
   border: none;
@@ -31,7 +34,7 @@ input[type=submit] {
   cursor: pointer;
 }
 
-input[type=submit]:hover {
+input[type="submit"]:hover {
   background-color: #049762;
 }
 
