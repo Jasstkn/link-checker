@@ -27,7 +27,7 @@ jobs:
       - name: Get Release Info
         run: |
           echo "VERSION=${GITHUB_REF/refs\/tags\//}" >> "$GITHUB_ENV"
-      - uses: wangyoucao577/go-release-action@v1.33
+      - uses: wangyoucao577/go-release-action@v1.34
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           goos: ${{ matrix.goos }}
